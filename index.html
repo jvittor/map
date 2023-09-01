@@ -1,0 +1,68 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>crimes report</title>
+  <style>
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.27"></script>
+
+  <script>
+    require([
+      "esri/config",
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/layers/FeatureLayer"
+    ], (esriConfig, Map, MapView, FeatureLayer)=> {
+
+      esriConfig.apiKey = "AAPKc61bece59f484489aaacadeb4bbcfde31ODqB2jHGk3fbbGrydBfcGfGUc7Hq0E2Fix15rCygiRIo0JGgIssJgxbb9Bh8ILB";
+
+      const map = new Map({
+        basemap: "arcgis-topographic"
+      });
+
+      const view = new MapView({
+        container: "viewDiv",
+        map: map,
+        center: [-39.109282, -12.668891],
+        zoom: 13,
+        constraints: {
+          snapToZoom: false
+        }
+      });
+
+      const renderer = {
+        type: "simple",
+        symbol: {
+          type: "simple-marker",
+          color: "orange"
+        }
+      };
+
+      const template = {
+        title: "Crime Information",
+        content: "Crime Category: {tipo_de_crime}<br>Crime Details: {diga_mais_alguns_detalhes_sobre}<br>Date and Time: {data_e_hora_do_crime}"
+      };
+
+      const trailheadsLayer = new FeatureLayer({
+        url: "https://services5.arcgis.com/AK65V2nI1ntiDq67/arcgis/rest/services/survey123_c07d0614b501449aa961a9a2045f9a12_results/FeatureServer?f=pjson",
+        renderer: renderer,
+        popupTemplate: template
+      });
+
+      map.add(trailheadsLayer);
+    });
+  </script>
+</head>
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>
